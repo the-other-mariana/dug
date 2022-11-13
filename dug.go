@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"strings"
+	"os/exec"
 )
 
 func filterFoldersOnly(data []map[string]interface{}) []string {
@@ -61,6 +62,8 @@ func main(){
 	user := os.Getenv("GITHUB_USER")
 	repo := os.Getenv("GITHUB_REPOSITORY")
 	repo_path := os.Getenv("REPO_PATH")
+	branch := os.Getenv("REPO_BRANCH")
+	extension := os.Getenv("MERGE_EXTENSION")
 
 	data := listRepoPathContent(gitToken, user, repo, repo_path)
 	folders := filterFoldersOnly(data)
@@ -79,10 +82,45 @@ func main(){
 	optFolder := fmt.Sprintf("%v/%v", repo_path, folders[opt-1])
 	fileParts := listRepoPathContent(gitToken, user, repo, optFolder)
 	fmt.Printf("Files parts: %v\n", len(fileParts))
-	fmt.Println("Download and merge? [y/n]:")
-	var proceed string
-	fmt.Scanln(&proceed)
-	if proceed == "y" {
-		fmt.Println("Downloading & merging")
+	fmt.Println("Download? [y/n]:")
+	var download string
+	fmt.Scanln(&download)
+	if download == "y" {
+		fmt.Println("Downloading...")
+		// download happens here
+		_ = os.Mkdir(folders[opt-1], os.ModePerm)
+		// curl https://<YOUR_TOKEN>@raw.githubusercontent.com/[user_name]/[repo_name]/[branch]/[repo_path]/[folders[opt-1]]/[fileParts[*]] -o [OUT_FOLDER]/[fileParts[*]]
+		for f := 0; f < len(fileParts); f++ {
+			fetchUrl := fmt.Sprintf("https://%v@raw.githubusercontent.com/%v/%v/%v/%v/%v/%v", gitToken, user, repo, branch, repo_path, folders[opt-1], fileParts[f]["name"])
+			outPath := fmt.Sprintf("%v/%v", folders[opt-1], fileParts[f]["name"])
+			fmt.Printf("%v\n", outPath)
+			args := []string{fetchUrl, "-o", outPath}
+			_, err := exec.Command("curl", args...).Output()
+			if err != nil {
+				log.Fatal("Error at curl command")
+				log.Fatal(err)
+			}
+		}
+		fmt.Printf("Downloaded files at: ./%v\n", folders[opt-1])
+		fmt.Println("Merge? [y/n]:")
+		var merge string
+		fmt.Scanln(&merge)
+		if merge == "y"{
+			// merging happens here
+			merged_file := fmt.Sprintf("%v.%v", folders[opt-1], extension)
+			args := []string{"-a", "merge", "-i", folders[opt-1], "-f", merged_file}
+			_, err := exec.Command("cylf", args...).Output()
+			if err != nil {
+				log.Fatal("Error at cylf merge command")
+				log.Fatal(err)
+			}
+			fmt.Println("Done.")
+			fmt.Printf("Merged file: %v-merged.%v\n", folders[opt-1], extension)
+			os.RemoveAll(fmt.Sprintf("/%v/", folders[opt-1]))
+		} else {
+			fmt.Println("Bye")
+		}
+	} else {
+		fmt.Println("Bye")
 	}
 }
