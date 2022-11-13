@@ -28,7 +28,8 @@ MERGE_EXTENSION=[mp4 | mp3 | py | pdf | ...]
 - Linux (Ubuntu 20.04 LTS - tested)
 
 ```
-dug
+sudo chmod 777 dug
+./dug
 ```
 
 - Windows 10
