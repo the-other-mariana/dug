@@ -69,4 +69,3 @@ GOOS=windows GOARCH=amd64 go build dug.go
 GOOS=linux GOARCH=arm go build cylf.go
 ```
 
-![img](res/1.png)
