@@ -55,7 +55,6 @@ func ListRepoPathContent(gitToken, user, repo, path string) []map[string]interfa
 	return data
 }
 
-// fullPath: %v/%v
 func DownloadSingleFile(fullPath string) {
 	fetchUrl := fmt.Sprintf("https://%v@raw.githubusercontent.com/%v/%v/%v/%v/%v", gitToken, user, repo, branch, repo_path, fullPath)
 	fmt.Printf("%v\n", fullPath)
@@ -68,22 +67,11 @@ func DownloadSingleFile(fullPath string) {
 }
 
 func DownloadFile(file string) {
-	//optFile := fmt.Sprintf("%v/%v", repo_path, file)
 	fmt.Println("Download? [y/n]:")
 	var download string
 	fmt.Scanln(&download)
 	if download == "y" {
 		fmt.Println("Downloading...")
-		/*
-			fetchUrl := fmt.Sprintf("https://%v@raw.githubusercontent.com/%v/%v/%v/%v/%v", gitToken, user, repo, branch, repo_path, file)
-			fmt.Printf("%v\n", optFile)
-			args := []string{fetchUrl, "-o", optFile}
-			_, err := exec.Command("curl", args...).Output()
-			if err != nil {
-				log.Fatal("Error at curl command")
-				log.Fatal(err)
-			}
-		*/
 		DownloadSingleFile(file)
 	}
 }
@@ -101,17 +89,6 @@ func DownloadFolder(folder string) {
 		_ = os.Mkdir(folder, os.ModePerm)
 		// curl https://<YOUR_TOKEN>@raw.githubusercontent.com/[user_name]/[repo_name]/[branch]/[repo_path]/[folders[opt-1]]/[fileParts[*]] -o [OUT_FOLDER]/[fileParts[*]]
 		for f := 0; f < len(fileParts); f++ {
-			/*
-				fetchUrl := fmt.Sprintf("https://%v@raw.githubusercontent.com/%v/%v/%v/%v/%v/%v", gitToken, user, repo, branch, repo_path, folder, fileParts[f]["name"])
-				outPath := fmt.Sprintf("%v/%v", folder, fileParts[f]["name"])
-				fmt.Printf("%v\n", outPath)
-				args := []string{fetchUrl, "-o", outPath}
-				_, err := exec.Command("curl", args...).Output()
-				if err != nil {
-					log.Fatal("Error at curl command")
-					log.Fatal(err)
-				}
-			*/
 			fullPath := fmt.Sprintf("%v/%v", folder, fileParts[f]["name"])
 			DownloadSingleFile(fullPath)
 		}
