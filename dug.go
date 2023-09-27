@@ -74,7 +74,6 @@ func DownloadFile(file string) {
 	fmt.Scanln(&download)
 	if download == "y" {
 		fmt.Println("Downloading...")
-		_ = os.Mkdir("output", os.ModePerm)
 		/*
 			fetchUrl := fmt.Sprintf("https://%v@raw.githubusercontent.com/%v/%v/%v/%v/%v", gitToken, user, repo, branch, repo_path, file)
 			fmt.Printf("%v\n", optFile)
