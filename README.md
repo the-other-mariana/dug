@@ -10,7 +10,13 @@ This program displays the content of a private repository's folder in Github, an
 export PATH="<Path/to/cylf/bin/ubuntu>:${PATH}"
 ```
 
-either in your `~/.bashrc` file or in a terminal.
+either in your `~/.bashrc` file or in a terminal right before running Dug. For example: 
+
+```
+export PATH="/home/mariana/go/src/github.com/the-other-mariana/cylf/bin/ubuntu:$PATH"
+```
+
+This will allow the Dug program to call `cylf` instead of `./cylf`
 
 2. Fill up the `.env` variables:
 
@@ -43,9 +49,22 @@ start dug.exe
 You must have installed Golang version `go1.18.7 linux/amd64` and then type:
 
 ```
-export GO111MODULE=off
+export PATH="<Path/to/cylf/bin/ubuntu>:${PATH}"
 go mod init
 go build dug.go
 ./dug
 ```
 
+### To Cross Compile The Source Code
+
+- Windows 10
+
+```
+GOOS=windows GOARCH=amd64 go build dug.go
+```
+
+- Raspberry Pi 3 Model B
+
+```
+GOOS=linux GOARCH=arm go build cylf.go
+```
