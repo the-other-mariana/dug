@@ -7,7 +7,7 @@ This program displays the content of a private repository's folder in Github, an
 1. Make sure you have `cylf` in your PATH by typing:
 
 ```
-export PATH="${HOME}/Documents/github-mariana/cylf/bin/ubuntu:${PATH}"
+export PATH="<Path/to/cylf/bin/ubuntu>:${PATH}"
 ```
 
 either in your `~/.bashrc` file or in a terminal.
@@ -44,6 +44,8 @@ You must have installed Golang version `go1.18.7 linux/amd64` and then type:
 
 ```
 export GO111MODULE=off
-go run dug.go
+go mod init
+go build dug.go
+./dug
 ```
 
