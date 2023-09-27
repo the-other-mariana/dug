@@ -66,6 +66,6 @@ GOOS=windows GOARCH=amd64 go build dug.go
 - Raspberry Pi 3 Model B
 
 ```
-GOOS=linux GOARCH=arm go build cylf.go
+GOOS=linux GOARCH=arm go build dug.go
 ```
 
